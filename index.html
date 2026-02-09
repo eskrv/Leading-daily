@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Casino 777 - Локальный автомат</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg">
+    <div class="glow"></div>
+    <div class="noise"></div>
+  </div>
+
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">CASINO 777</div>
+        <div class="tag">Локальный автомат • демо</div>
+      </div>
+      <div class="controls">
+        <button id="spinBtn" class="btn primary">SPIN</button>
+        <button id="shuffleBtn" class="btn">Перемешать пул</button>
+        <button id="resetStatsBtn" class="btn ghost">Сбросить статистику</button>
+        <button id="resetBtn" class="btn ghost">Сбросить к дефолту</button>
+        <button id="toggleBoardBtn" class="btn">Скрыть табло</button>
+        <button id="uploadBgBtn" class="btn">Загрузить фон</button>
+        <button id="removeBgBtn" class="btn ghost">Удалить фон</button>
+        <input id="bgFileInput" class="file-input-hidden" type="file" accept="image/*" />
+      </div>
+    </header>
+
+    <section class="layout">
+      <section class="machine machine-photo">
+        <div class="machine-stage">
+          <img class="machine-base-img" src="img/machine.png" alt="Игровой автомат" />
+          <div class="machine-overlay">
+            <div class="screen-shell live-window">
+              <div class="screen">
+                <div class="reel" id="reelA">7</div>
+                <div class="reel" id="reelB">7</div>
+                <div class="reel" id="reelC">7</div>
+              </div>
+            </div>
+            <div class="handle" aria-label="Рычаг">
+              <div class="handle-cap"></div>
+            </div>
+          </div>
+        </div>
+        <div class="machine-footer">
+          <div class="result" id="resultText">Однорукий бандит потирает руки</div>
+          <div class="panel">
+            <div class="meter">
+              <span>Пул комбинаций</span>
+              <strong id="poolCount">0</strong>
+            </div>
+            <div class="meter">
+              <span>Спины</span>
+              <strong id="spinCount">0</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="board" id="boardPanel">
+        <div class="board-header">
+          <div class="board-title">Табло комбинаций</div>
+          <div class="board-sub" id="boardSubtitle">Кликни по имени победителя, чтобы изменить</div>
+        </div>
+
+        <div class="board-content">
+          <section id="boardRulesTab" class="board-tab">
+            <div class="rules-card">
+              <div class="rules-title">Правила</div>
+              <ol class="rules-list">
+                <li>Существуют различные комбинации.</li>
+                <li>Когда выпадает комбинация, человек, к которому она присвоена, становится ведущим следующего дейли.</li>
+                <li>Отключенные комбинации не участвуют в выпадении до повторного включения.</li>
+                <li>Одна и та же активная комбинация не выпадает подряд.</li>
+              </ol>
+            </div>
+          </section>
+
+          <section id="boardCombosTab" class="board-tab">
+            <div class="board-grid" id="boardGrid"></div>
+
+            <div class="editor">
+              <div class="editor-title">Управление пулом</div>
+              <div class="editor-row">
+                <input id="newCombo" type="text" placeholder="Новая комбинация (например 7 7 7 или 🍒🍒🍒)" />
+                <button id="addComboBtn" class="btn">Добавить</button>
+              </div>
+              <div class="editor-row">
+                <input id="removeCombo" type="text" placeholder="Удалить комбинацию" />
+                <button id="removeComboBtn" class="btn ghost">Удалить</button>
+              </div>
+              <div class="editor-note">Редактирование сохраняется локально в браузере</div>
+            </div>
+          </section>
+        </div>
+
+        <div class="board-tabs-footer">
+          <button id="boardTabRules" class="tab-btn active" type="button">Правила</button>
+          <button id="boardTabCombos" class="tab-btn" type="button">Комбинации</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="bottom-settings">
+    <div class="settings-row">
+      <label class="speed-control" for="reelSpeed">Скорость прокрутки (мс)</label>
+      <input id="reelSpeed" type="range" min="10" max="120" step="5" value="35" />
+      <span id="reelSpeedValue">35</span>
+    </div>
+
+    <div class="audio-grid">
+      <section class="audio-card">
+        <div class="audio-title">Фоновая музыка</div>
+        <div class="audio-actions">
+          <button id="bgMusicUploadBtn" class="btn" type="button">Загрузить</button>
+          <button id="bgMusicRemoveBtn" class="btn ghost" type="button">Удалить</button>
+          <input id="bgMusicFileInput" class="file-input-hidden" type="file" accept="audio/*" />
+        </div>
+        <div class="audio-volume-row">
+          <label for="bgMusicVolume">Громкость</label>
+          <input id="bgMusicVolume" type="range" min="0" max="100" step="1" value="35" />
+          <span id="bgMusicVolumeValue">35%</span>
+        </div>
+      </section>
+
+      <section class="audio-card">
+        <div class="audio-title">Звук прокрутки</div>
+        <div class="audio-actions">
+          <button id="spinSoundUploadBtn" class="btn" type="button">Загрузить</button>
+          <button id="spinSoundRemoveBtn" class="btn ghost" type="button">Удалить</button>
+          <input id="spinSoundFileInput" class="file-input-hidden" type="file" accept="audio/*" />
+        </div>
+        <div class="audio-volume-row">
+          <label for="spinSoundVolume">Громкость</label>
+          <input id="spinSoundVolume" type="range" min="0" max="100" step="1" value="50" />
+          <span id="spinSoundVolumeValue">50%</span>
+        </div>
+      </section>
+
+      <section class="audio-card">
+        <div class="audio-title">Звук джекпота</div>
+        <div class="audio-actions">
+          <button id="jackpotSoundUploadBtn" class="btn" type="button">Загрузить</button>
+          <button id="jackpotSoundRemoveBtn" class="btn ghost" type="button">Удалить</button>
+          <input id="jackpotSoundFileInput" class="file-input-hidden" type="file" accept="audio/*" />
+        </div>
+        <div class="audio-volume-row">
+          <label for="jackpotSoundVolume">Громкость</label>
+          <input id="jackpotSoundVolume" type="range" min="0" max="100" step="1" value="70" />
+          <span id="jackpotSoundVolumeValue">70%</span>
+        </div>
+        <label class="audio-loop-row">
+          <input id="jackpotSoundLoop" type="checkbox" />
+          <span>Зациклить звук выигрыша</span>
+        </label>
+      </section>
+    </div>
+  </footer>
+
+  <div id="jackpotModal" class="jackpot-modal" aria-hidden="true">
+    <div class="jackpot-card">
+      <div class="jackpot-lights">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="jackpot-title">JACKPOT</div>
+      <div class="jackpot-combo-label">Выпала комбинация</div>
+      <div id="jackpotCombo" class="jackpot-combo">777</div>
+      <div class="jackpot-winner-label">Победитель</div>
+      <div id="jackpotWinner" class="jackpot-winner">Не назначен</div>
+      <button id="jackpotCloseBtn" class="btn">Закрыть</button>
+    </div>
+  </div>
+
+  <div id="coinRain" class="coin-rain" aria-hidden="true"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

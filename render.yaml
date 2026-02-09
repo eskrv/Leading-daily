@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: casino-777
+    env: node
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: DATA_DIR
+        value: /var/data/data
+      - key: UPLOADS_DIR
+        value: /var/data/uploads
+    disks:
+      - name: casino777-disk
+        mountPath: /var/data
+        sizeGB: 1
